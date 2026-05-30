@@ -1,0 +1,9 @@
+[submodule "orientation/desire-to-goal"]
+	path = orientation/desire-to-goal
+	url = git@github.com:nnnet/hermes-skill-desire-to-goal.git
+[submodule "devops/chief-manager"]
+	path = devops/chief-manager
+	url = git@github.com:nnnet/hermes-skill-chief-manager.git
+[submodule "devops/self-critique"]
+	path = devops/self-critique
+	url = git@github.com:nnnet/hermes-skill-self-critique.git
