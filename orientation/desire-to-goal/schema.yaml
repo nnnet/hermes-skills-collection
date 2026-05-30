@@ -1,0 +1,120 @@
+# desire-to-goal — single source of truth for slots, validation, export.
+#
+# Read by:
+#   - workflow-engine (core/schema.py loads it; replaces DesireToGoalSlots dataclass)
+#   - extractor LLM (slot definitions auto-rendered into extraction prompt)
+#   - final-artifact writer (export.fields decide what next skill receives)
+#   - F1 test assertions (clarity_score weights, required slots list)
+#   - SKILL.md (humans read description fields when authoring)
+#
+# Single edit point — change here, all consumers re-read at runtime.
+
+name: desire-to-goal
+version: 2
+description: |
+  Прояснение размытой пользовательской хотелки до структурированной
+  цели. Цикл DECOMPOSE → ASK → REFLECT → LOCK + раздельный extractor
+  LLM, который заполняет слоты на основе диалога.
+
+# ─── Slots — структурированные поля результата ───────────────────────
+slots:
+  истинная_цель:
+    type: string
+    required: true
+    description: |
+      Конечная потребность, которую user реально хочет удовлетворить.
+      Не средство. Не product feature. Глубинная потребность за словами
+      пользователя. Если потребность не озвучена и из контекста не выводится —
+      оставить null, не выдумывать.
+    examples:
+      - "прибыль от криптотрейдинга (горизонт/размер не озвучены)"
+      - "автономия в управлении домом без ручных действий"
+
+  средство:
+    type: string
+    required: true
+    description: |
+      Конкретное существительное, которое user озвучил как способ.
+      Берётся буквально из его слов, без переинтерпретации.
+    examples:
+      - "бот для торговли криптой"
+      - "умный дом"
+
+  место:
+    type: string
+    required: true
+    description: |
+      Контекст, среда, домен где это будет работать. Может быть
+      физическое место, отрасль, тип системы, площадка.
+    examples:
+      - "Binance Futures"
+      - "квартира 3 комнаты, MQTT-протокол"
+
+  команда:
+    type: string
+    required: false
+    description: |
+      Кто будет делать. "сам" / "один" / "с AI-командой" / конкретный состав.
+      По умолчанию не озвучено — оставить null.
+
+  мотивация:
+    type: string
+    required: false
+    description: |
+      Зачем это нужно user'у. Финансовая независимость / эксперимент /
+      доп. доход / автоматизация рутины. Заполняется когда user ответил
+      на вопрос "зачем тебе это" не-отказным образом.
+
+# ─── Audit collection ─────────────────────────────────────────────────
+audit:
+  # При каждом turn'е сырое user-сообщение append'ится сюда. Полный
+  # лог "что именно говорил пользователь" — для отладки и истории.
+  # НЕ экспортируется в следующий скилл (только goal block идёт дальше).
+  желание: []           # list[str], мутируется engine'ом
+  bot_history: []       # list[str], мутируется engine'ом
+
+# ─── Confidence per slot ──────────────────────────────────────────────
+# Extractor LLM возвращает 0..1 per slot. Низкая confidence на required
+# слот ⇒ engine форсит re-ask в следующем turn'е, не двигает фазу.
+confidence:
+  threshold_high: 0.75   # ≥ → принимаем slot как заполненный
+  threshold_low: 0.4     # ≤ → форсим re-ask
+  default: 0.0
+
+# ─── Phase routing — engine state machine ─────────────────────────────
+phases:
+  initial: INIT
+  required_completion: LOCK      # LOCK достижим только когда required slots ≥ threshold_high
+  terminal: DONE                 # DONE = final artifact дозреет тут
+  max_iterations: 8              # после 8 turn'ов engine форсит LOCK даже на низкой completeness
+
+# ─── F1 clarity_score веса (используется тестами и engine'ом) ─────────
+clarity_score:
+  weights:
+    completeness: 0.30
+    stability: 0.25
+    confidence: 0.20
+    grounding: 0.15
+    contradictions: 0.10
+  veto:
+    means_as_goal: true            # средство в slot истинная_цель → -0.5
+    training_grounded: true        # значение слот'а не следует из user-text → -0.3
+    rushed_to_action: true         # exit до required_completion на ≤2 turns → -0.4
+
+# ─── Mandatory lock guard ─────────────────────────────────────────────
+mandatory_lock_phrase: "Истинная цель определена"
+
+# ─── Что уходит в следующий скилл ─────────────────────────────────────
+# Subset of state. Всё, чего тут нет — остаётся в audit trail, не
+# проброшено дальше.
+export:
+  fields:
+    - goal              # dict с заполненными слотами (только required + filled optional)
+    - confidence        # per-slot scores
+    - turns_used        # int — сколько turn'ов потребовалось
+    - clarity_score     # final 0..1
+  # Рекомендуемый следующий skill в orchestration. desire-to-goal закончил
+  # clarification → chief-manager поднимает 8-фазный workflow (decompose →
+  # capability matrix → plan → user approval → dispatch → monitor →
+  # synthesize). См. план 2026-05-27T06-18__desire-to-goal-to-execution-handoff.md
+  next_skill_hint: devops/chief-manager

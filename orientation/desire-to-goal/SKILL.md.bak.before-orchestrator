@@ -1,0 +1,435 @@
+---
+name: desire-to-goal
+description: "Universal pre-step skill that turns a vague desire (any user request) into a structured Goal with measurable success criteria. Uses a cyclic clarification controller — not a rigid questionnaire. Exit by sufficiency (confidence + stability), not by completeness. Output is compatible with the chief-manager skill's Goal dataclass."
+metadata:
+  hermes:
+    tags: [clarification, goal-setting, elicitation, orchestration, meta]
+    category: orientation
+    related_skills: [chief-manager]
+---
+
+# Desire to Goal — clarification skill
+
+Turn a vague desire into an operational Goal. **Not a questionnaire** — a cyclic controller that asks only what changes the plan, listens to the dynamics of answers (not just words), and exits when the goal is sufficient (not perfect).
+
+## When to load
+
+- User request is short or vague ("сделай мне сайт", "нужно разобраться с X")
+- Multi-step task without explicit success criteria
+- Before any planning skill (`chief-manager`, `plan`, `writing-plans`)
+- Any time you would otherwise guess at user intent
+
+## ПЕРВЫЙ ход — декомпозиция «истинная цель / средство / место / контекст»
+
+**ВАЖНО — skip-фильтр перед декомпозицией.** Сначала **быстрая inline-проверка** (без extra tool call):
+
+| Категория | Признак | Действие |
+|---|---|---|
+| **Concrete one-shot** | атомарная операция со всеми параметрами в одном сообщении («Удали репозиторий X», «Напомни в 9:00 позвонить») | сразу tool call, без декомпозиции |
+| **Phatic** | «Привет», «Спасибо», «Окей», «Понял» | короткий социальный ответ |
+| **Follow-up** | реплика продолжает уже идущий диалог («а подробнее?», «ещё пример») | ответ в контексте, без новой декомпозиции |
+| **Lookup** | запрос о состоянии системы или известной сущности («Сколько у меня кредитов?», «Покажи задачи») | tool + результат |
+
+Если запрос **не очевидно** подпадает под одну из этих 4 категорий И **не очевидно** требует полной декомпозиции — прочитай `references/skip-criteria.md` для расширенных категорий (advisory с 1 уточнением и др.). На однозначной хотелке (concrete one-shot / phatic / lookup) read_file НЕ нужен.
+
+Если запрос подпадает под skip — отвечай напрямую (один уточняющий вопрос или сразу tool call), **БЕЗ** шаблона из 3 слотов с «не указано». Если сомневаешься — разворачивай (дефолт).
+
+**До любого ASK / REFLECT** (если skip не сработал) агент обязан показать
+**короткое** (4-7 строк) понимание того что услышал, в формате декомпозиции. Это не философия и не навязывание, это **демонстрация качества понимания** + **запрос подтверждения**.
+
+**Что мы отделяем:** ЗАЧЕМ человек пришёл (истинная цель / нужда / outcome) от того ЧЕМ и ГДЕ он предложил это достичь (средство / место). Хотелка часто грамматически фокусирует средство, а истинная цель прячется в наречии:
+
+| Хотелка | Истинная цель | Средство | Место |
+|---|---|---|---|
+| «Бот, торгующий крипту прибыльно» | **прибыль** (метрика?) | бот | крипторынок |
+| «Сайт, показывающий портфолио удобно» | **новые клиенты** (через удобство?) | сайт | портфолио в вебе |
+| «Дашборд по моим финансам» | **контроль над финансами** | дашборд | домохозяйство |
+| «Помоги с готовкой» (advisory) | **еда сегодня** | помощь / план | моя кухня |
+| «Спланируй путешествия на год» (advisory) | **впечатления + отдых за год** | план | мой год |
+| «Удали репозиторий X» (concrete) | удалить репо | команда `gh repo delete` | этот org |
+
+В формате «<артефакт>, <глагол> <дополнение> <качественно>» — три оси чёткие (средство = существительное, место = дополнение, цель = наречие).
+В advisory-формате («помоги», «спланируй», «расскажи») — средство и место часто пустые/общие, фокус на need + critical нюансах.
+В concrete-формате (одно действие, всё дано) — декомпозиция тривиальна (одна строка), сразу выполнять.
+
+**Шаблон ответа (для размытой хотелки):**
+
+> Понял так. Разложу как услышал — поправь:
+>
+> — **Истинная цель**: <ровно то наречие/качество что озвучено + явный список НЕОЗВУЧЕННОГО: метрика? горизонт? кому?>. <не дописывать собственные допущения>
+> — **Средство**: <ровно то существительное что озвучено> — **детали не указаны** (не дописывать биржу/стек/инструмент/наличие готового артефакта).
+> — **Место/контекст**: <ровно то что озвучено или **не указано**> (не дописывать «обычно делают так-то»).
+>
+> Правильно понял? И **два важных вопроса**:
+>
+> 1. **Зачем тебе это?** Какую потребность или боль ты этим закрываешь? (Это нужно чтобы не остановиться на транзакционной формулировке цели — «продавать товары», «вести канал», «торговать ботом» — и докопаться до того что под ней лежит: финансовая независимость? признание? выживание? любопытство? Цель, в которой видна **человеческая потребность**, ведёт к правильному решению; цель «магазин для продажи товаров» — тавтология средства, на ней команда сделает не то.)
+> 2. **Про рамки**: рассматриваем ТОЛЬКО этот вариант средства+места, или открыт к альтернативам? (Не навязываю — нужно чтобы команда строила правильную вещь, а не «<средство> для <места> любой ценой».)
+
+**Почему нужен вопрос про мотивацию/«зачем»:** формулировка «истинной цели» в самой декомпозиции часто остаётся на транзакционном уровне (next-layer means), потому что user буквально не озвучивал глубже. «Магазин для продажи товаров» — это всё ещё описание механики, а не нужды; «ютуб-канал для роста аудитории» — то же самое. Без отдельного вопроса «зачем» под цель не подвести базу. Не превращай это в допрос (`Допрос вместо прояснения`) — один открытый вопрос про мотивацию + следить за тоном ответа.
+
+**Жёстко в шаблоне:** ЛЮБОЙ слот, который пользователь явно не озвучил — слово «**не указано**» БЕЗ продолжения. Никаких «скорее всего», «вероятно», «уже есть», «обычно». Если хочется добавить — это сигнал что ты тащишь данные из training data, остановись. См. `EmptySlotFillFromTraining` в anti-patterns.
+
+**И ОТДЕЛЬНО — про вопросы:** в самом вопросе про рамки и в любых уточняющих вопросах **ЗАПРЕЩЕНО перечислять конкретные бренды / продукты / платформы / фреймворки в скобках или как примеры**, ЕСЛИ user об этом не просил. Никаких «(Philips Hue, Home Assistant, Яндекс, Apple Home и т.д.)», «(hh.ru, LinkedIn, …)», «(Bybit, Binance, …)», «(Notion, Google Sheets, …)». Это `BrandListInClarificationQuestion` — мягкая форма `SolutionLeakage` (см. anti-patterns). Пользователь увидит готовый список и начнёт «выбирать из вариантов» вместо того чтобы сказать своими словами — это контаминация прояснения. Спрашивай **категорийно** («есть уже какие-то устройства / платформа?»), не **списком брендов**.
+
+**Исключение** (когда brand-list ДОПУСТИМ): user **сам явно попросил** перечислить варианты — «а какие у тебя есть варианты?», «дай мне список», «какие бывают?», «что посоветуешь из...?». В этом случае дать короткий список (3-5 пунктов) **известных** опций — нормально. После этого вернуться к уточнению цели; не углубляться в config-вопросы про каждый из перечисленных вариантов.
+
+После подтверждения декомпозиции — переходить к 8 primitives + ASK/REFLECT по обычному циклу.
+
+**Что НЕЛЬЗЯ ДО декомпозиции:**
+- Задавать config-вопросы про предложенное средство («какая биржа? paper или real? какой стек?») — это `MeansAsGoalAntiPattern` (см. `references/anti-patterns.md`), частный случай `SolutionLeakage`.
+- Предлагать конкретные альтернативные средства или места («может попробовать копитрейдинг?») — это навязывание. Задача — спросить «открыт ли к альтернативам», не «вот тебе альтернатива».
+- **Заполнять пустые слоты декомпозиции из training data.** Это `EmptySlotFillFromTraining` (см. `references/anti-patterns.md`).
+- **Цитировать свой OWN-предыдущий output как факт о user'е.** Если ты на предыдущем turn'е сам перечислил варианты (бренды, стратегии, инструменты) — это НЕ означает что user их выбрал. Декомпозиция строится только из того что user **literally сказал**. Это `WithinSessionSelfCitation` (anti-pattern 0c). Пример: ты на turn 2 ответил «биржи: Binance, Bybit, OKX» — на turn 3 НЕЛЬЗЯ писать «у тебя уже есть на Bybit».
+- **Интерпретировать non-answer как ответ.** ЛЮБОЙ ответ user'а, который не является прямым ответом на конкретный заданный тобой вопрос — это **non-answer**, и единственный правильный ход — задать вопрос ПОВТОРНО (можно перефразировать). Это `NonAnswerInterpretedAsAnswer` (anti-pattern 0d, общее правило, не только для мотивационных вопросов). Не интерпретируй за user'а, не строй на догадке «он наверное имел в виду X». Применяется ко всем вопросам — про цель, средство, место, мотивацию, сроки, бюджет, рамки. Реальные паттерны non-answer:
+  - **Отвечает про другое:** ты спросил «зачем» → user написал «хочу чтобы работало и развивалось» (это про средство, не про мотивацию).
+  - **Перевод темы:** «начинай с defaults», «делай как считаешь», «продолжай», «уже всё ответил» → НЕ подтверждение твоей формулировки.
+  - **Уклонение от конкретики:** «небольшой банкролл, не хочу пока называть» → не указано, оставить слот пустым.
+  - **Молчание / пропуск:** user ответил на 2 из 3 вопросов → 3-й переспросить отдельно.
+  - **Surface-affirmation:** «ок», «угу», «да» в ответ на НЕ-yes/no вопрос («зачем тебе это?») — это non-answer.
+- **Single-track strategy lock-in.** Прежде чем записать в `Средство` конкретную стратегию (EMA/RSI, 1h таймфрейм, конкретная биржа) — проверь себя: исследовал ли ты ≥3 альтернативных подхода (DCA, copy-trading, sigaals-only, portfolio rebalancing, market making, long-hold, arbitrage, grid trading)? Если только одна стратегия очевидна для user'а — пиши её; иначе оставь `не указано` и спроси какой подход ближе. Это extension `MeansAsGoalAntiPattern`. Если в хотелке слот не озвучен — в декомпозиции он `**не указано**`, БЕЗ продолжения «(скорее всего <…> / уже есть <…> / типично используют <…>)». Категорически запрещено: домысливать биржу/стек/инструмент/числа/историю/наличие артефактов («уже есть бот», «бэктест +29%», «обычно EMA/RSI», «по умолчанию Bybit») — даже если они «вероятны для такого класса задач». Реальный кейс 2026-05-24: на хотелку «Бот, торгующий крипту прибыльно» бот сделал корректный skill_view → декомпозицию, но в слот `Средство` дофабриковал «Уже есть: Bybit, BTC/USDT, бэктест +29% за 6 мес. Paper trading сейчас, реал — потом» — юзер этого ни слова не говорил.
+- **Defaults без research ≥3 альтернатив = fail.** Даже если user пишет «начинай с defaults / делай как считаешь / на твой вкус» — это НЕ освобождает от обязанности эксплицитно перебрать минимум 3 принципиально разных подхода (стратегий/стеков/архитектур) И зафиксировать выбор с обоснованием **до** chief_spawn. Default «EMA crossover на Bybit Python+ccxt» без сравнения с DCA / copy-trading / signals / grid — это `MeansAsGoalAntiPattern` extension: бот выбрал то что чаще всего видел в training, а не то что подходит user'у. Правильный паттерн: «вижу 4 подхода: A (плюсы/минусы), B (...), C (...), D (...). Беру A как baseline потому что Y. Если хочешь иначе — скажи, иначе погнали.» Это даёт user'у точку входа поправить и фиксирует осознанный выбор, а не auto-fill.
+
+**Что МОЖНО:**
+- Делать research внутри (типичные средства для такой цели), но НЕ показывать его пользователю до подтверждения.
+- Включать в декомпозицию НЕОЗВУЧЕННЫЕ части цели («прибыль — какого порядка? за какой срок? развлечение или заработок?») — это показывает что цель не очевидна, без навязывания ответа.
+- Аггрегированный или развёрнутый вариант — на простую concrete-хотелку одна строка декомпозиции и сразу выполнение; на сложную build-хотелку 4-7 строк с подсветкой неозвученных мест в цели.
+
+**Качество > форма.** Если для конкретной задачи декомпозиция выглядит вымученной (например «расскажи факт про Москву» — там декомпозиция = «факт; речь; Москва» = бесполезна) — пропусти и сразу выполняй. Цель этого шага — поймать **ложную ясность** (где грамматическая форма скрывает истинную цель), а не выполнить ритуал.
+
+См. worked example для крипто-бота в `references/examples.md` (Example 3).
+
+## Core principles (from research — see references/anti-patterns.md)
+
+1. **Открытые вопросы, не допрос** — rigid checklists make users perform, not reveal
+2. **Backtracking allowed** — clarification is not a one-way funnel; new info changes prior answers
+3. **Sufficiency, not completeness** — exit when confidence + stability cross thresholds
+4. **Contradictions are signals** — log them, don't kill them; they can stay `acknowledged`
+5. **Truth in dynamics, not words** — track answer stability across iterations; humans rationalize
+
+## Conceptual model — 8 primitives
+
+```
+Хотелка → Субъект, Контекст
+       ↓
+       Цель → КритерийУспеха, Метрика, Гипотеза
+       ↓
+       Ограничения
+```
+
+Full taxonomy with dependencies: `references/primitives.md`.
+
+## ABSOLUTE RULE — never leak solutions during clarification
+
+During ASK / REFLECT / HYPOTHESIZE / RESEARCH / ACKNOWLEDGE the agent **must not**:
+- Show numbered lists of options / variants
+- Show tables with ROI / price / yield / capacity numbers
+- Surface research findings to the user ("вот что нашёл по теме...")
+- Propose specific solutions, products, suppliers, addresses, brands
+- Compare alternatives ("вариант A vs B")
+
+**Research IS allowed — but its output is for the AGENT to ask better questions, not for the user to see.**
+
+Variants, numbers, comparisons appear **only after EXIT**, in chief-manager Phase 1 or as part of the final Goal-confirmation message. Showing them earlier anchors the user's thinking and converts user-driven discovery into agent-driven recommendation — the user is no longer formulating their own goal, they are reacting to yours.
+
+This is anti-pattern `SolutionLeakage` (see `references/anti-patterns.md`). Real case 2026-05-16: agent showed 5 monetization variants with ROI tables during clarification of Sochi land — user response: *"Это неприемлемо на этапе прояснения хотелок. Это выглядит как навязывание или подсказка."* Hot rule, not a soft preference.
+
+**Recovery if violated:**
+1. Apologize explicitly
+2. Log via `add_contradiction(description="SolutionLeakage — ...", severity=0.7)` and `resolve_contradiction(idx, status="acknowledged")`
+3. Continue without new suggestions until EXIT
+
+## Cyclic protocol — actions
+
+The `ClarificationController` picks one of 6 actions per iteration:
+
+| Action | When | What the agent does |
+|---|---|---|
+| **ASK** | confidence < 0.4 | Задаёт ≤3 открытых вопроса от активной персоны |
+| **REFLECT** | стабильность < 0.5 | Перефразирует понимание, просит подтверждение |
+| **HYPOTHESIZE** | confidence < 0.7, stable | Предлагает 2-3 альтернативные интерпретации |
+| **RESEARCH** | model uncertainty (не user) | Вызывает web_search для расширения контекста |
+| **ACKNOWLEDGE** | есть открытые противоречия | Показывает противоречие, спрашивает статус |
+| **EXIT** | confidence+stability ≥ thresholds OR soft cap 5 | Build goal, save artifact |
+
+Full mode reference: `references/action-modes.md`.
+
+## Stop criterion
+
+```
+EXIT when:
+  (confidence ≥ 0.7 AND stability ≥ 0.7)
+  OR (iteration ≥ 5 AND user confirms continue=False)
+```
+
+Soft cap at 5 — after that the controller will keep cycling but the agent should ask the user whether to continue or stop with current state.
+
+## ФИНАЛЬНЫЙ ход — OBLIGATORY lock-block перед любым EXIT (P0, severity критично)
+
+**ЛЮБОЙ выход из цикла прояснения** — будь то `chief_spawn`, self-execute (сам начинаешь работу), advisory-EXIT («тут не надо команды, погнали»), даже когда user сам говорит «начинай» — ОБЯЗАН начаться с явного **lock-блока** в следующем формате:
+
+```
+**Истинная цель определена**: <финальная формулировка ровно как зафиксировали>
+**Применяю defaults для не-озвученных слотов**: <слот1=X (потому что Y), слот2=Z (потому что W), …>
+**План действия**: <что именно делаешь — спавн команды / сам делаю / advisory-ответ>
+
+Если что-то поправить — скажи СЕЙЧАС, иначе перехожу.
+```
+
+Lock-фраза «**Истинная цель определена**» — буквальная, без вариаций. Это явный gate-сигнал, чтобы оператор (и метрика) могли отличить «бот понял окончательно и фиксирует» от «бот ещё в REFLECT/REFINE и может пересмотреть».
+
+**Запрещено** (нарушение skill, severity критично):
+- EXIT без lock-блока: «понял, начинаю» / «ок, поехали» / «делаю» / «уже спавню команду» — все ЗАПРЕЩЕНЫ как первая фраза финального хода.
+- Сразу `chief_spawn` / `delegate_task` / `mc_project_create` без предшествующего lock-блока в том же turn'е.
+- Lock-блок без поля «Применяю defaults для не-озвученных слотов» — даже если defaults нет, явно написать «defaults не нужны, все слоты заполнены user'ом».
+- Lock-блок без поля «План действия» — без него непонятно из чего у user'а ещё есть chance возразить.
+
+**Почему критично:** F1 batch-009 (17 кейсов, 2026-05-25) показал 0/17 PASS на метрике `true_goal_locked` — потому что бот делал отличную декомпозицию (completeness 0.706 avg, grounding 0.627 avg, stability 0.649 avg), но **ни разу** не написал явную lock-фразу перед действием. 11/17 кейсов фейлили строго по `partial:confidence` — этот единственный gate.
+
+**Кейс-сравнение** (как должно выглядеть):
+
+✗ НЕПРАВИЛЬНО (p18 smart-home, turn 3):
+```
+📚 skill_view: "smart-home/homeassistant"
+💻 terminal: "mkdir -p /opt/data/workspace/home-ass..."
+Понял — defaults + action. Начинаю собирать полный HA-пакет.
+🔀 delegate_task...
+```
+(нет lock-блока, нет defaults declaration, нет chance возразить)
+
+✓ ПРАВИЛЬНО:
+```
+**Истинная цель определена**: уют + автоматизация рутины дома (свет, отопление, утро/вечер сценарии) — локально, без облака, без пайки.
+**Применяю defaults для не-озвученных слотов**:
+- железо HA: подготовлю docker-compose и инструкции для развёртывания на твоей машине дома (потому что Zigbee-устройства физически у тебя, в этом контейнере координатор не пробросить).
+- структура автоматизаций: Aqara → Zigbee2MQTT, Xiaomi/Ikea → HA-native, YAML с понятной разбивкой по сценариям.
+**План действия**: спавню команду из 1 чифа + 1 воркера для подготовки конфигов и руководства по развёртке.
+
+Если что-то поправить — скажи сейчас, иначе спавню.
+[chief_spawn в СЛЕДУЮЩЕМ turn'е после паузы на чтение, не в этом]
+```
+
+**Pause after lock**: после lock-блока — пауза до следующего user-input. Не делать chief_spawn / delegate / terminal в том же turn'е, что и lock-блок. Дать user'у возможность сказать «стоп, поправить X». Если user в следующем turn'е молчит >30s или пишет «+/да/погнали/ок» — тогда action.
+
+**Edge case — user явно торопит** («начинай с defaults», «уже всё ответил»):
+- Lock-блок ВСЁ РАВНО обязателен.
+- Pause-after-lock не обязателен (user уже разрешил действие).
+- Можно spawn в том же turn'е после lock-блока.
+
+**Recovery если нарушил** (action без lock-блока):
+1. На следующем turn'е извиниться: «упустил lock-блок, фиксирую задним числом».
+2. Написать lock-блок ретроспективно.
+3. Дать user'у chance отменить если он не согласен.
+
+## Python entry point
+
+```python
+import sys
+sys.path.insert(0, '/opt/data/skills/orientation/desire-to-goal/scripts')
+from clarifier import Clarifier
+
+# Phase 1: instantiate
+c = Clarifier(raw_desire="Сделай мне сайт")
+# auto-detects persona from text → "business" by default
+
+# Phase 2: cyclic loop (agent in control of dialogue)
+while True:
+    step = c.next_step()
+    print(f"Iter {step['iteration']}: action={step['action']} | "
+          f"conf={step['confidence']:.2f} | stab={step['stability']:.2f}")
+
+    if step["action"] == "exit":
+        break
+
+    # Agent executes step["instruction"] — asks question, reflects, etc.
+    # Then receives user reply, extracts primitives from it, updates state:
+    c.update_primitives(
+        goal_statement="...",
+        subject={"role": "founder", "skill_level": "beginner"},
+        success_criteria=["...", "..."],
+        metrics=["..."],
+        constraints=["..."],
+        hypotheses=["I assume ..."]
+    )
+
+    # If contradictions appear:
+    c.add_contradiction("user wants both X and !X", entities=["X"], severity=0.7)
+
+# Phase 3: output
+goal = c.build_goal_for_chief_manager()  # graph.Goal-compatible dict
+paths = c.save_artifact("/opt/data/workspace/my-project/")
+# → saves goal.json + contradictions.json + qa_history.json
+```
+
+## Persona-driven elicitation
+
+12 fixed personas + auto-generation for novel domains. The active persona shapes the QUESTIONS the agent asks (a finance question is different from an art question, even for the same primitive).
+
+Fixed library:
+- Elicitation: `maieutic`, `psychologist`, `journalist`, `anthropologist`, `devil_advocate`, `doctor`, `child`
+- Domain: `business`, `finance`, `lawyer`, `tech`, `systems_engineer`, `art`, `learning`, `product_manager`, `negotiator`, `operator`, `scientist`
+
+`detect_persona(text)` selects based on keyword triggers. If no match, defaults to `maieutic` (Socratic facilitator). For novel domains, the agent should construct an ad-hoc persona prompt (e.g., "child pediatrician").
+
+Full library + triggers: `references/personas.md`.
+
+## Anti-pattern detection
+
+`detect_anti_patterns(state)` runs validators at any iteration. Common ones:
+- `GoalWithoutCriteria` — goal stated, no success criteria
+- `NonMeasurableGoal` — criteria exist, no metrics
+- `GoalWithoutOwner` — no subject defined
+- `GoalDrift` — goal radically changed in early iterations (semantic similarity < 0.2)
+- `CriteriaWithoutGoal` — criteria stated, goal still vague
+
+Full list: `references/anti-patterns.md`.
+
+## Two exit paths — advisory vs. build
+
+After EXIT, choose the right delivery based on the nature of the task:
+
+| Task type | Deliverable | Exit action |
+|---|---|---|
+| **Build** — code, bot, system, infrastructure | Artifact that needs construction | `build_goal_for_chief_manager()` → spawn a chief |
+| **Advisory** — plan, recommendations, how-to, curriculum | Answer / structured advice | Deliver directly in the reply |
+
+**Signals for advisory path:** the user wants a *plan*, *list*, *recommendations*, *schedule*, *guide*, or *advice* — not a running system. Examples: travel itinerary, language learning plan, job search strategy, recipe suggestions.
+
+**Signals for build path:** user expects a *working thing* — bot, app, dashboard, script, API, service.
+
+Do NOT spawn a chief for advisory tasks. Deliver the answer after EXIT; the chief adds latency without value when there's nothing to build.
+
+---
+
+## Inline context hints — first-class shortcut
+
+Users sometimes include structured context in their message:
+- `Контекст обо мне: занятой профессионал`
+- `(стиль: casual, односложно, отшучивается на конкретику)`
+- `Контекст обо мне: студент-самоучка, средне-мотивированный`
+
+Treat these as **pre-filled primitives** — they shortcut persona detection and reduce the clarification budget. Specifically:
+- `Контекст обо мне:` → sets `subject.role` and `subject.skill_level`
+- `стиль:` → shapes HOW you ask questions (match the user's register)
+- Bracketed context often signals the user is self-aware about their pattern; don't over-probe
+
+If these are present, you can often skip ASK iterations for subject/context primitives and go straight to goal/criteria questions.
+
+---
+
+## Output format
+
+`build_goal_for_chief_manager()` returns a dict compatible with `graph.Goal` from chief-manager:
+
+```python
+{
+    "statement": str,
+    "success_criteria": [str, ...],
+    "deliverable_format": str,
+    "out_of_scope": [str, ...],
+    "constraints": [str, ...],
+    "subgoals": [],  # comes later from chief-manager Phase 1
+    "_clarification_metadata": {
+        "confidence": float,
+        "stability_score": float,
+        "iterations": int,
+        "active_persona": str,
+        "open_contradictions": [...],
+    }
+}
+```
+
+`save_artifact(workspace_path)` writes:
+- `goal.json` — the Goal dict above
+- `contradictions.json` — full ContradictionLog (all records, all statuses)
+- `qa_history.json` — sequence of (question, answer, action) per iteration
+
+## Exit path decision — advisory vs build
+
+After EXIT, the agent chooses ONE of two paths based on whether the goal requires building something:
+
+- **Advisory** (plan, recommendation, curriculum, recipe, itinerary) → deliver the output directly in the response. Do NOT spawn a chief. The user wants the answer now.
+- **Build** (code, bot, app, tool, dashboard, CRM) → spawn a chief with a structured brief. Do NOT deliver a mock output inline.
+
+Signals for **advisory**: verbs like "расскажи", "помоги", "объясни", "спланируй", "научи", "выучи", "найди" when no software artifact is expected.
+Signals for **build**: verbs like "сделай", "построй", "создай", "напиши бота/скрипт/приложение".
+
+Mixed signals (e.g. "найди работу"): clarify whether user wants a list now or an ongoing agent doing outreach.
+
+## Inline user context annotations
+
+Users sometimes append structured hints directly in their message in the format:
+
+```
+Контекст обо мне: <role/situation>
+(стиль: <tone hint>)
+```
+
+These are first-class signals — treat them the same as explicitly stated constraints:
+- `Контекст обо мне` → adjust clarification depth (expert = fewer questions; non-technical = more scaffolding)
+- `(стиль: ...)` → match the response register (casual, terse, romantic, tired, etc.)
+
+When these annotations are present, skip questions already implied by the context. For example, `Контекст обо мне: non-technical hobbyist` means skip questions about stack preferences, CI/CD setup, or advanced config — the user doesn't care.
+
+## Advisory → build bridge (post-EXIT pattern)
+
+After delivering an advisory answer (plan, curriculum, recommendation), the user may benefit from a buildable artifact that extends it. Offer it as an **optional follow-up**, not as the primary delivery:
+
+> *"Хочешь чтобы я спавнул агента, который сделает тебе готовый Anki-дек на 1000 слов?"*
+
+Rules:
+- Offer only ONE concrete artifact, not a menu of options
+- Phrase as a yes/no question, not a directive ("хочешь?" not "спавню")
+- If user confirms → spawn chief; if silent or changes topic → drop it
+- Do NOT offer this for tasks that were already in the build path
+
+Examples:
+- Language learning plan → offer Anki deck builder
+- Travel itinerary → offer calendar export / booking checklist agent
+- Job search strategy → offer resume optimizer / outreach bot
+
+## Pitfalls
+
+- **Не задавай >3 вопросов за раунд** — устает пользователь, падает достоверность
+- **Не убивай противоречия** — `add_contradiction` потом `resolve_contradiction(status="acknowledged")` валиден
+- **Не претендуй на знание** — если model uncertainty, лучше RESEARCH action, чем угадать
+- **Don't auto-build personas without trigger** — defaults to maieutic when no match; do NOT pick a random persona to "be interesting"
+- **Save artifact every time** — даже если пользователь прерывает на середине, частичный goal.json полезен следующей сессии
+- **Goal versioning matters** — каждый раз когда `goal_statement` меняется, добавляй в `goal_versions` (clarifier делает автоматически если использовать `update_primitives`)
+- **Structured key-value answers = EXIT signal** — когда пользователь отвечает в формате ключ-значение (`- key: value`) с явным `Контекст обо мне: ...` блоком и/или `(стиль: ...)` хинтом — это кооперативный ответ на все вопросы сразу. Не начинай новый раунд уточнений: извлеки примитивы из блока, выставь confidence ≥ 0.7 и выходи. Пример: пользователь пишет `- exchange: Bybit\n- bankroll: небольшой\nКонтекст обо мне: non-technical hobbyist.\n(стиль: casual)` — всё нужное есть.
+- **"Я уже ответил выше" = немедленный EXIT + action** — если пользователь явно говорит «я уже ответил», «всё что нужно выше», «начинай с defaults», «просто делай» — это сильнее structured key-value EXIT-сигнала. Не переспрашивать. Немедленно извлечь всё что есть из контекста + памяти + hindsight, применить defaults на остальное, и стартовать исполнение. Единственное исключение — ONE конкретный незаменимый блокер (например, API ключ которого нет нигде). В этом случае задать ровно один вопрос, не больше.
+- **"Continuation that isn't" — продолжение, которое не продолжение** — если у пользователя уже есть частично-собранный артефакт (бот, скрипт, сайт) и он возвращается с новым желанием ("сделай прибыльным", "теперь пусть масштабируется"), это НЕ continuation request. Это новое желание. Существующее — только контекст, не фиксация средства. Применять полную desire-to-goal декомпозицию с нуля. Ошибка: предположить что нужно "тюнить параметры текущего решения" вместо того чтобы выяснить истинную цель. Пример: есть paper-trading бот с EMA+RSI, пользователь пишет "бот, торгующий крипту прибыльно" — не продолжение, новая цель, нужно прояснить real vs paper, риск-аппетит, горизонт.
+- **Дублированное сообщение != новый запрос** — если пользователь прислал то же самое сообщение дважды (мобильный интерфейс, случайная отправка), не сбрасывай состояние и не перезапускай clarification с начала. Продолжай с текущей итерации, задай следующий вопрос или выйди если confidence достаточен.
+- **SolutionLeakage исключение: явный запрос вариантов** — правило "не показывай варианты во время clarification" имеет одно исключение: если пользователь явно спросил "а какие у тебя есть варианты?" / "что ты можешь?" — обязан дать список, иначе блокируешь диалог. Это не SolutionLeakage, это ответ на прямой вопрос. После ответа продолжай clarification нормально.
+
+## Behavior notes (v1.1 — bugfix wave 2026-05-16)
+
+All known issues from initial v1 were fixed in the same session. Notes for future maintainers:
+
+1. **`build_goal()` statement resolution** — falls back through: `state.goal_statement` → last `hypotheses[-1].summary` → last `goal_versions[-1]`. You can rely on a hypothesis-only flow producing a non-empty `statement`.
+2. **`detect_anti_patterns()` returns dual-schema dicts** — each item has both `type`+`name` and `explanation`+`description`. Use whichever your consumer expects; they always match.
+3. **`estimate_stability()` single-version case** — when only one goal version has been logged and it hasn't churned, semantic stability returns 0.7 (partial), not 0.0. Full 1.0 still requires 2+ identical versions (a confirmation round). To EXIT with a single version, do an explicit second `update_primitives(hypotheses=[same summary])` after the user confirms — this duplicates the version and pushes stability to 1.0.
+4. **`update_primitives(hypotheses=[...])` auto-versions** — if the last hypothesis has a `summary` field, it is appended to `goal_versions` automatically. Drift detection and stability metrics now see hypothesis-only rewordings.
+5. **`Clarifier.from_state_dict(dump)` resumes a session** — `dump_state()` is lossless and round-trips through `from_state_dict`. Use for cron-based or multi-message clarifications where the agent must reconstruct state across processes. The `iteration` counter, `goal_versions`, `contradictions`, `qa_history`, all preserved.
+6. **Controller has a final REFLECT fallback** — when `confidence ≥ 0.65` but `stability < threshold`, the action is REFLECT (lock-in confirmation round), not ASK. This prevents the agent from looping back to questions after the goal is essentially formed.
+
+### Stability semantics (read carefully)
+
+Stability is a **consensus metric** — it measures whether the goal stays the same across rephrasings, not how confident you are in it. Two implications:
+
+- A clarification CAN end at stability=0.6 (single confirmed version, no churn) by setting `Clarifier(stability_threshold=0.55)` for simple cases.
+- For high-stakes goals keep the default 0.7 — force a duplicate-version confirmation. Agent flow: REFLECT → user confirms → `update_primitives` with the same hypothesis → stability=1.0 → EXIT.
+
+## Files
+
+- `scripts/clarifier.py` — main implementation (~350 lines)
+- `references/primitives.md` — 8 primitives, dependencies, minimal sets
+- `references/anti-patterns.md` — 5 clarification + 7 goal anti-patterns
+- `references/action-modes.md` — when ASK vs REFLECT vs HYPOTHESIZE vs RESEARCH
+- `references/personas.md` — 18 personas + triggers + auto-creation pattern
+- `references/examples.md` — 3-5 worked examples (desire → final Goal)
+
+## Related skills
+
+- `chief-manager` — primary consumer of the Goal output (Phase 0)
+- `writing-plans` — can consume Goal to produce concrete plan
+- `plan` — can consume Goal to produce markdown plan

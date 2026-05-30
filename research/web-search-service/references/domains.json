@@ -1,0 +1,23 @@
+{
+  "playwright_required": [
+    {"domain": "cian.ru", "reason": "JS SPA, anti-bot fingerprinting, login wall", "added": "2026-05-16"},
+    {"domain": "avito.ru", "reason": "JS-heavy, rate limiting, bot detection", "added": "2026-05-16"},
+    {"domain": "realtymag.ru", "reason": "JS rendering required for property listings", "added": "2026-05-16"},
+    {"domain": "domclick.ru", "reason": "Sberbank portal, JS-heavy SPA", "added": "2026-05-16"},
+    {"domain": "move.ru", "reason": "JS-heavy real estate listings", "added": "2026-05-16"},
+    {"domain": "mirkvartir.ru", "reason": "JS-rendered property cards", "added": "2026-05-16"},
+    {"domain": "restate.ru", "reason": "JS-rendered listings", "added": "2026-05-16"},
+    {"domain": "homehunter.ru", "reason": "JS SPA for property search", "added": "2026-05-16"},
+    {"domain": "1dom.ru", "reason": "JS-heavy real estate", "added": "2026-05-16"},
+    {"domain": "instagram.com", "reason": "requires login, JS-heavy", "added": "2026-05-16"},
+    {"domain": "linkedin.com", "reason": "bot detection, requires login", "added": "2026-05-16"},
+    {"domain": "twitter.com", "reason": "bot detection, JS-heavy", "added": "2026-05-16"},
+    {"domain": "x.com", "reason": "bot detection, JS-heavy", "added": "2026-05-16"}
+  ],
+  "curl_bypass": [
+    {"domain": "medium.com", "reason": "Cloudflare — curl TLS bypass sufficient", "added": "2026-05-16"},
+    {"domain": "habr.com", "reason": "simple bot check, curl bypass works", "added": "2026-05-16"}
+  ],
+  "skip": [],
+  "web_extract_ok": []
+}
