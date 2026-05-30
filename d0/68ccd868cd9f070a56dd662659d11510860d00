@@ -1,0 +1,353 @@
+research/chroma-knowledge-base/references/cmf-youtube-playlists.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-7
+mlops/inference/vllm/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-372
+mlops/evaluation/lm-evaluation-harness/references/benchmark-guide.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-488
+research/web-search-service/scripts/domain_config.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-124
+mlops/inference/obliteratus/references/methods-guide.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-141
+research/web-search-service/references/domains.json
+  s_e5369d415d379b::t_8ad249ca2a1895 1-23
+mlops/evaluation/weights-and-biases/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-594
+paper-navigator/scripts/utils.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-355
+devops/profile-design/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-152
+research-ideation/assets/idea-candidate-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-39
+devops/task-decomposition/references/patterns.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-144
+media/video-to-knowledge-base/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-249
+orientation/desire-to-goal/workflow/prompts.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-193
+paper-navigator/references/arxiv-categories.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-76
+evo-memory/assets/experiment-memory-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-41
+paper-navigator/scripts/literature_report.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-463
+mlops/inference/llama-cpp/references/troubleshooting.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-442
+devops/chief-manager/scripts/chief.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-964
+mlops/evaluation/weights-and-biases/references/integrations.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-700
+orientation/desire-to-goal/SKILL-v2-engine.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-125
+research-ideation/references/solution-design.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-148
+dogfood/references/issue-taxonomy.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-109
+devops/task-decomposition/references/examples.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-277
+orientation/desire-to-goal/SKILL.md.bak.before-orchestrator
+  s_e5369d415d379b::t_8ad249ca2a1895 1-435
+research/chroma-knowledge-base/references/cmf-programming-schema.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-105
+mlops/inference/vllm/references/optimization.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-226
+research/idea-scoring-pattern/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-107
+devops/chief-manager/references/api-bugs-found-2026-05-17.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-177
+devops/chief-manager/scripts/failures.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-195
+orientation/desire-to-goal/workflow/config.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-50
+research-survey/references/section-quality-checklist.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-61
+orientation/desire-to-goal/references/personas.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-243
+devops/soul-md-authoring/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-285
+mlops/models/audiocraft/references/advanced-usage.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-666
+data-science/data-governance-metadata-schema/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-120
+paper-navigator/references/search-principles.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-222
+paper-navigator/scripts/author_search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-150
+research-ideation/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-321
+mlops/inference/llama-cpp/references/server.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-150
+orientation/desire-to-goal/scripts/clarify_engine.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-630
+mlops/evaluation/weights-and-biases/references/artifacts.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-584
+research-ideation/assets/paper-summary-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-34
+mlops/inference/llama-cpp/references/quantization.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-243
+gifs/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+research-ideation/assets/proposal-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-85
+paper-navigator/scripts/citation_traverse.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-230
+research/chroma-knowledge-base/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-257
+mlops/research/dspy/references/examples.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-663
+research-survey/assets/survey-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-108
+paper-navigator/scripts/github_search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-102
+research-ideation/assets/ranking-scorecard-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-34
+evo-memory/assets/evolution-report-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-35
+mlops/inference/obliteratus/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-342
+paper-navigator/scripts/library_search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-153
+mlops/inference/vllm/references/quantization.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-284
+research-survey/references/survey-methodology.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-141
+mlops/models/audiocraft/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-568
+mlops/evaluation/weights-and-biases/references/sweeps.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-847
+research/chroma-knowledge-base/references/cmf-regeneration-workflow.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-114
+orientation/desire-to-goal/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-241
+devops/chief-manager/references/hindsight-bank-isolation.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-91
+paper-navigator/references/iterative-collection.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-154
+paper-navigator/scripts/fetch_paper.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-221
+devops/task-decomposition/references/repair-recipes.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-127
+mlops/evaluation/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+mlops/inference/llama-cpp/references/hub-discovery.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-168
+devops/chief-manager/references/dispatch-pattern-2026-05-17.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-82
+research/web-search-service/scripts/search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-195
+research-ideation/assets/direction-summary-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-57
+mlops/models/audiocraft/references/troubleshooting.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-504
+evo-memory/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-237
+cmf-ynvrsty/cmf-youtube-indexing/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-106
+mlops/models/segment-anything/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-506
+paper-navigator/scripts/recommend.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-195
+devops/chief-manager/references/kanban-sqlite-direct-access.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-136
+mlops/research/dspy/references/optimizers.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-566
+devops/chief-manager/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-603
+research/landing-copy-pattern/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-104
+media/video-preprocessor/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-340
+media/youtube-playlist-reader/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-105
+mlops/training/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+inference-sh/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-19
+paper-navigator/scripts/trending.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-137
+evo-memory/references/ide-protocol.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-130
+orientation/desire-to-goal/references/anti-patterns.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-396
+orientation/desire-to-goal/workflow/__init__.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-8
+devops/workflow-templates/references/prediction-market-apis.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-56
+devops/soul-md-authoring/references/toolset-tool-mapping.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-62
+mlops/inference/obliteratus/templates/analysis-study.yaml
+  s_e5369d415d379b::t_8ad249ca2a1895 1-40
+research/market-research-pattern/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-107
+devops/task-decomposition/scripts/validator.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-304
+devops/workflow-templates/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-693
+devops/chief-manager/references/inspecting-chief-board-state.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-179
+mlops/inference/llama-cpp/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-249
+mlops/inference/obliteratus/templates/abliteration-config.yaml
+  s_e5369d415d379b::t_8ad249ca2a1895 1-33
+orientation/desire-to-goal/references/skip-criteria.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-133
+devops/chief-load-balancing/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-293
+devops/profile-loadout/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-100
+paper-navigator/scripts/sota.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-175
+mlops/research/dspy/references/modules.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-475
+paper-navigator/scripts/download_paper.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-290
+evo-memory/references/ese-protocol.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-175
+mlops/evaluation/lm-evaluation-harness/references/distributed-eval.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-519
+research-ideation/references/proposal-extension.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-181
+orientation/skills-hygiene/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-110
+domain/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-24
+paper-navigator/scripts/find_code.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-179
+mlops/inference/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+evo-memory/references/paper-prompts.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-197
+devops/failure-recovery/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-672
+mlops/inference/llama-cpp/references/advanced-usage.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-504
+mlops/vector-databases/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+orientation/desire-to-goal/references/primitives.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-147
+research-ideation/references/paper-reading.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-79
+mlops/models/segment-anything/references/troubleshooting.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-484
+mlops/models/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+evo-memory/references/ive-protocol.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-184
+devops/task-decomposition/scripts/decomposer.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-460
+orientation/capabilities-2026-05/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-168
+research-survey/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-210
+devops/task-decomposition/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-178
+research-ideation/references/tree-search-protocol.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-153
+mlops/evaluation/lm-evaluation-harness/references/custom-tasks.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-602
+paper-navigator/assets/paper-summary-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-51
+mlops/inference/vllm/references/server-deployment.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-255
+evo-memory/assets/ideation-memory-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-49
+devops/chief-manager/scripts/graph.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-284
+devops/profile-loadout/references/crash-diagnosis-missing-toolsets.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-75
+mlops/research/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+mlops/inference/obliteratus/references/analysis-modules.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-166
+mlops/inference/llama-cpp/references/optimization.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-89
+orientation/desire-to-goal/schema.yaml
+  s_e5369d415d379b::t_8ad249ca2a1895 1-120
+mlops/inference/obliteratus/templates/batch-abliteration.yaml
+  s_e5369d415d379b::t_8ad249ca2a1895 1-41
+paper-navigator/references/reading-strategy.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-124
+research/chroma-knowledge-base/references/cmf-sources-coverage-check.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-9
+paper-navigator/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-229
+research-ideation/references/elo-ranking-guide.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-183
+orientation/desire-to-goal/references/examples.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-61
+diagramming/DESCRIPTION.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-3
+research/web-search-service/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-198
+research-ideation/references/problem-selection.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-112
+devops/self-critique/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-110
+paper-navigator/references/api-reference.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-200
+README.md
+  s_e5369d415d379b::t_b6d2cc40273014 1-106
+devops/workflow-postmortem/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-217
+paper-navigator/scripts/arxiv_monitor.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-239
+dogfood/templates/dogfood-report-template.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-86
+devops/kanban-pm-monitor/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-261
+devops/workflow-synthesis/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-195
+paper-navigator/references/output-formats.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-75
+orientation/desire-to-goal/references/action-modes.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-184
+data-science/data-governance-metadata-schema/references/cmf-ynvrsty-sources.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-26
+evo-memory/references/memory-schema.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-330
+mlops/evaluation/lm-evaluation-harness/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-498
+mlops/models/segment-anything/references/advanced-usage.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-589
+paper-navigator/references/disambiguation.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-54
+mlops/research/dspy/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-594
+yuanbao/SKILL.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-108
+mlops/evaluation/lm-evaluation-harness/references/api-evaluation.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-490
+orientation/desire-to-goal/scripts/clarifier.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-732
+paper-navigator/scripts/dataset_search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-98
+research-ideation/references/literature-tree.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-108
+paper-navigator/scripts/scholar_search.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-381
+devops/chief-manager/scripts/capability.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-295
+devops/profile-loadout/scripts/loadout.py
+  s_e5369d415d379b::t_8ad249ca2a1895 1-737
+orientation/desire-to-goal/SKILL.md.v1.bak.20260525-082456
+  s_e5369d415d379b::t_8ad249ca2a1895 1-435
+mlops/inference/vllm/references/troubleshooting.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-447
+devops/task-decomposition/references/prompts.md
+  s_e5369d415d379b::t_8ad249ca2a1895 1-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d068ccd868cd9f070a56dd662659d11510860d00",
+  "prompts": {},
+  "sessions": {
+    "s_e5369d415d379b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9b040558-739b-4a21-810b-53eec3b51a99",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "nnnet <zkowkmdx@sharklasers.com>"
+    }
+  }
+}
