@@ -29,9 +29,14 @@ that forwards a raw Sheets API `requests[]` array to
 ## The helper
 
 - **Script ID:** `187nav-q_nVb4btVcaZVEAO2q4cBQpF5T9p0Yf-yf6vmm-SfPm-GJRv40`
-- **Function:** `batchUpdate(spreadsheetId, requestsJson)` — `requestsJson`
-  is a JSON **string** of a Sheets API `requests` array; returns the API
-  reply JSON.
+- **`batchUpdate(spreadsheetId, requestsJson)`** — `requestsJson` is a JSON
+  **string** of a Sheets API `requests` array; returns the API reply JSON.
+  Use for pivots, charts, formatting, merges — any `batchUpdate` op.
+- **`setValues(spreadsheetId, sheetName, valuesJson)`** — writes a 2D array
+  into `sheetName` (created if missing; empty → first sheet). **Numbers stay
+  numbers** — no string constraint, unlike `modify_sheet_values`. Returns
+  `{sheet, gid, rows, cols}` — use the returned `gid`/`rows` for the pivot
+  source range. Prefer this over `modify_sheet_values` for filling data.
 - Already bound to the OAuth GCP project, Apps Script + Sheets APIs are
   enabled. Just call it.
 
