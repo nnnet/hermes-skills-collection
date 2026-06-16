@@ -40,6 +40,47 @@ that forwards a raw Sheets API `requests[]` array to
 - Already bound to the OAuth GCP project, Apps Script + Sheets APIs are
   enabled. Just call it.
 
+## EXACT RECIPE — build a pivot from scratch (follow VERBATIM)
+
+Three tool calls, in order. Do NOT improvise arguments. Do NOT use
+`modify_sheet_values`. Do NOT offer the user a script.
+
+**Step 1 — create the spreadsheet.** `create_spreadsheet` takes ONLY `title`
+(optionally `sheet_names`). It has NO `description` argument — passing one
+fails validation and trips the MCP circuit-breaker.
+```
+create_spreadsheet(title="Продажи Q3")
+```
+→ grab `spreadsheetId` from the reply.
+
+**Step 2 — write the data via the helper (numbers stay numbers).**
+```
+run_script_function(
+  script_id="187nav-q_nVb4btVcaZVEAO2q4cBQpF5T9p0Yf-yf6vmm-SfPm-GJRv40",
+  function_name="setValues",
+  parameters=["<spreadsheetId>", "", "[[\"Регион\",\"Продукт\",\"Сумма\"],[\"Север\",\"A\",1000],[\"Север\",\"B\",1500],[\"Юг\",\"A\",2000],[\"Юг\",\"C\",800],[\"Восток\",\"B\",1200],[\"Запад\",\"A\",900]]"],
+  dev_mode=true
+)
+```
+3rd param is the 2D array as a JSON **string** (numbers are fine here).
+→ reply gives `{gid, rows}` — use them in step 3.
+
+**Step 3 — build the pivot via the helper** (use `gid` and `rows` from step 2;
+`endRowIndex = rows`):
+```
+run_script_function(
+  script_id="187nav-q_nVb4btVcaZVEAO2q4cBQpF5T9p0Yf-yf6vmm-SfPm-GJRv40",
+  function_name="batchUpdate",
+  parameters=["<spreadsheetId>", "[{\"updateCells\":{\"rows\":[{\"values\":[{\"pivotTable\":{\"source\":{\"sheetId\":<gid>,\"startRowIndex\":0,\"startColumnIndex\":0,\"endRowIndex\":<rows>,\"endColumnIndex\":3},\"rows\":[{\"sourceColumnOffset\":0,\"showTotals\":true,\"sortOrder\":\"ASCENDING\"}],\"values\":[{\"summarizeFunction\":\"SUM\",\"sourceColumnOffset\":2}]}}]}],\"start\":{\"sheetId\":<gid>,\"rowIndex\":0,\"columnIndex\":5},\"fields\":\"pivotTable\"}}]"],
+  dev_mode=true
+)
+```
+
+Then report the URL `https://docs.google.com/spreadsheets/d/<spreadsheetId>/edit`.
+After EACH call, read the reply: if it has `"error"` or `isError`, fix the
+argument and retry — do NOT report success until step 3 returned
+`Execution successful`.
+
 ## Call pattern
 
 ```
