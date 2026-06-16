@@ -1,0 +1,19 @@
+google/sheets-advanced/SKILL.md
+  s_1b99a7ec9e9aa9::t_6c391747e3f651 43-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "4c5dc3083d6fff28f7ff0cb83b83b2cd2c8bcce1",
+  "prompts": {},
+  "sessions": {
+    "s_1b99a7ec9e9aa9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5025e0d8-1d1b-4f97-8c52-eec971a58fbd",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "nnnet <zkowkmdx@sharklasers.com>"
+    }
+  }
+}
