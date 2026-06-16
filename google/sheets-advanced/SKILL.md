@@ -81,6 +81,28 @@ After EACH call, read the reply: if it has `"error"` or `isError`, fix the
 argument and retry — do NOT report success until step 3 returned
 `Execution successful`.
 
+## Exact MCP tool parameters (pass ONLY these)
+
+The Google MCP validates strictly. Three universal rules:
+1. **Never pass `user_google_email`** — it is auto-injected from config. Omit it.
+2. **Never pass `null`/`None` for an optional argument** — OMIT it entirely.
+   (e.g. `create_drive_file(folder_id=None)` fails — don't send the key.)
+3. **Never invent an argument** that isn't in the list below.
+
+Tools you need (argument → type; `?` = optional, omit if unused):
+
+- `create_spreadsheet(title: str, sheet_names?: list[str])` — that's ALL.
+  There is **no** `description`. To make a spreadsheet use THIS, never
+  `create_drive_file`.
+- `create_sheet(spreadsheet_id: str, sheet_name?: str, source_sheet_name?: str,
+  insert_sheet_index?: int)`
+- `get_spreadsheet_info(spreadsheet_id: str)`
+- `read_sheet_values(spreadsheet_id: str, range_name?: str)` — default range
+  `A1:Z1000`.
+- `run_script_function(script_id: str, function_name: str,
+  parameters?: list, dev_mode?: bool)` — for the helper calls; pass
+  `parameters` as a JSON array, `dev_mode: true`.
+
 ## Call pattern
 
 ```
