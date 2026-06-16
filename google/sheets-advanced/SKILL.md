@@ -98,11 +98,26 @@ Build the `requests` array per the Sheets API and pass it through.
 
 ## Flow summary
 
-1. Have the `spreadsheetId` (from `create_spreadsheet` / the user's URL).
-2. `get_spreadsheet_info` → note the numeric `sheetId`(s).
-3. Build the Sheets API `requests[]` for the op (pivot / chart / format).
-4. `run_script_function(helper, "batchUpdate", [spreadsheetId, json], dev_mode=true)`.
-5. Check the returned reply JSON; report the sheet URL to the user.
+1. `create_spreadsheet` → get `spreadsheetId` (and note the first tab's name).
+2. Fill data with `modify_sheet_values` (see gotchas below) — or write it inside
+   the helper batchUpdate together with the pivot.
+3. `get_spreadsheet_info` → note the numeric `sheetId`(s) for source/target.
+4. Build the Sheets API `requests[]` for the op (pivot / chart / format).
+5. `run_script_function(helper, "batchUpdate", [spreadsheetId, json], dev_mode=true)`.
+6. Check the returned reply JSON; report the sheet URL to the user.
+
+## Writing data — two gotchas that cause HTTP 400
+
+`modify_sheet_values(spreadsheet_id, range_name, values, ...)`:
+1. **All cell values must be STRINGS.** `values` is `Union[str, List[List[str]]]`;
+   a raw number `10` is rejected. Send `"10"`, not `10` — e.g.
+   `[["Регион","Продукт","Сумма"],["Север","A","1000"], …]`.
+2. **The range must name the tab:** `"Data!A1"`, not bare `"A1"`, and that tab
+   must exist (use the default `Sheet1`, or `create_sheet` first). Wrong tab →
+   "Unable to parse range".
+
+Or skip `modify_sheet_values` and write the rows inside the same helper
+`batchUpdate` via an `updateCells` request — one atomic call, no pitfalls.
 
 Do NOT tell the user to run a script themselves — you do it via the
 helper. Only fall back to instructions if the helper call errors with an
