@@ -1,39 +1,39 @@
 [submodule "orientation/desire-to-goal"]
 	path = orientation/desire-to-goal
-	url = git@github.com:nnnet/hermes-skill-desire-to-goal.git
+	url = https://github.com/nnnet/hermes-skill-desire-to-goal.git
 [submodule "devops/chief-manager"]
 	path = devops/chief-manager
-	url = git@github.com:nnnet/hermes-skill-chief-manager.git
+	url = https://github.com/nnnet/hermes-skill-chief-manager.git
 [submodule "devops/self-critique"]
 	path = devops/self-critique
-	url = git@github.com:nnnet/hermes-skill-self-critique.git
+	url = https://github.com/nnnet/hermes-skill-self-critique.git
 [submodule "superpowers/tdd"]
 	path = superpowers/tdd
-	url = git@github.com:nnnet/hermes-skill-superpowers-tdd.git
+	url = https://github.com/nnnet/hermes-skill-superpowers-tdd.git
 [submodule "superpowers/debugging"]
 	path = superpowers/debugging
-	url = git@github.com:nnnet/hermes-skill-superpowers-debug.git
+	url = https://github.com/nnnet/hermes-skill-superpowers-debug.git
 [submodule "superpowers/writing-plans"]
 	path = superpowers/writing-plans
-	url = git@github.com:nnnet/hermes-skill-superpowers-writing-plans.git
+	url = https://github.com/nnnet/hermes-skill-superpowers-writing-plans.git
 [submodule "superpowers/executing-plans"]
 	path = superpowers/executing-plans
-	url = git@github.com:nnnet/hermes-skill-superpowers-executing-plans.git
+	url = https://github.com/nnnet/hermes-skill-superpowers-executing-plans.git
 [submodule "superpowers/verification"]
 	path = superpowers/verification
-	url = git@github.com:nnnet/hermes-skill-superpowers-verification.git
+	url = https://github.com/nnnet/hermes-skill-superpowers-verification.git
 [submodule "orientation/capabilities-2026-05"]
 	path = orientation/capabilities-2026-05
-	url = git@github.com:nnnet/hermes-skill-capabilities-2026-05.git
+	url = https://github.com/nnnet/hermes-skill-capabilities-2026-05.git
 [submodule "orientation/skills-hygiene"]
 	path = orientation/skills-hygiene
-	url = git@github.com:nnnet/hermes-skill-skills-hygiene.git
+	url = https://github.com/nnnet/hermes-skill-skills-hygiene.git
 [submodule "devops/task-decomposition"]
 	path = devops/task-decomposition
-	url = git@github.com:nnnet/hermes-skill-task-decomposition.git
+	url = https://github.com/nnnet/hermes-skill-task-decomposition.git
 [submodule "devops/workflow-templates"]
 	path = devops/workflow-templates
-	url = git@github.com:nnnet/hermes-skill-workflow-templates.git
+	url = https://github.com/nnnet/hermes-skill-workflow-templates.git
 [submodule "devops/profile-design"]
 	path = devops/profile-design
-	url = git@github.com:nnnet/hermes-skill-profile-design.git
+	url = https://github.com/nnnet/hermes-skill-profile-design.git
